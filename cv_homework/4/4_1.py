@@ -90,8 +90,8 @@ class SkinDetector():
                 f = f and np.alltrue(skin_prop > self.skin_th)
                 # 该像素三通道分别对应各自直方图的比例
                 f = f and np.alltrue(bg_prop < self.bg_th)
-                f = f and skin_prop > bg_prop
-                mask[h, w] = 255 if f.all() else 0
+                f = f and np.alltrue(skin_prop > bg_prop)
+                mask[h, w] = 255 if f else 0
         return mask, np.expand_dims(mask, axis=2)&img  
         # (h, w) -> (h, w, 1) 才能合 (h, w, 3) 运算
         # np.bitwise_and(mask, img)
