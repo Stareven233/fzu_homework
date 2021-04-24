@@ -22,7 +22,7 @@ class SkinDetector():
     再传入完整图像进行检测
     """
 
-    def __init__(self, hist_bins=64, threshhold_factor=0.5):
+    def __init__(self, hist_bins=64, threshhold_factor=0.3):
         self.h_bins = hist_bins
         # 计算直方图时将256分成几份
         self.bin_size = 256 // hist_bins
@@ -98,7 +98,8 @@ class SkinDetector():
 
 
 def main():
-    detector = SkinDetector()
+    detector = SkinDetector(32, 0.29)
+    # 这图背景较易区分，故可设hist_bins更低有助于选择更多的人脸部分
     skin = plt.imread('./4/xwg_skin.png')
     bg = plt.imread('./4/xwg_bg.png')
     detector.train(skin, bg)
@@ -106,12 +107,14 @@ def main():
     img = plt.imread('./4/xwg2.jpg')
     mask, skin_img = detector.run(img)
 
-    draw = draw_picture(1, 3)
-    plt.figure(figsize=(10, 3))
-    draw(1, img, '原图')
-    draw(2, mask, 'mask')
-    draw(3, skin_img, '皮肤部分')
-    plt.savefig('xwg_detected.jpg')
+    draw = draw_picture(2, 3)
+    plt.figure(figsize=(9, 6))
+    draw(1, skin, 'train_skin')
+    draw(3, bg, 'train_bg')
+    draw(4, img, '原图')
+    draw(5, mask, 'mask')
+    draw(6, skin_img, '皮肤部分')
+    plt.savefig('./4xwg_detected.jpg')
     plt.show()
 
 
